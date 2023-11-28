@@ -1,34 +1,52 @@
 package br.ufrn.imd.model;
 
-import java.util.ArrayList;
-
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Playlist {
-	private SimpleStringProperty nome;
-	private ArrayList<Musica> musicas;
+	private SimpleStringProperty name;
+	private SimpleIntegerProperty currentSongIndex;
+	private ObservableList<Song> songs;
 	
 	public Playlist() {
-		musicas = new ArrayList<Musica>();
+		songs = FXCollections.observableArrayList();
+		currentSongIndex = new SimpleIntegerProperty(0);
 	}
 	
-	public SimpleStringProperty getNome() {
-		return nome;
+	public SimpleStringProperty getName() {
+		return name;
 	}
-
-	public void setNome(String nome) {
-		this.nome = new SimpleStringProperty(nome);
+	public void setName(SimpleStringProperty name) {
+		this.name = name;
 	}
-
-	public void addMusica(Musica m) {
-		musicas.add(m);
+	public ObservableList<Song> getSongs() {
+		return songs;
 	}
-
-	public ArrayList<Musica> getMusicas() {
-		return musicas;
+	public void setSongs(ObservableList<Song> songs) {
+		this.songs = songs;
 	}
-
-	public void setMusicas(ArrayList<Musica> musicas) {
-		this.musicas = musicas;
+	
+	public Song start() {
+		currentSongIndex.setValue(0);
+		return songs.get(currentSongIndex.getValue());
 	}
+	
+	public Song next() {
+		currentSongIndex.setValue((currentSongIndex.getValue() + 1) % songs.size());;
+		return songs.get(currentSongIndex.getValue());
+	}
+	
+	public Song previous() {
+		currentSongIndex.setValue((currentSongIndex.getValue() - 1 + songs.size()) % songs.size());;
+		return songs.get(currentSongIndex.getValue());
+	}
+	
+	public Song setSong(Integer index) {
+		currentSongIndex.setValue(index);
+		return songs.get(currentSongIndex.getValue());
+	}
+	
+	
 }

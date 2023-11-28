@@ -1,7 +1,6 @@
 package br.ufrn.imd.application;
 	
-import br.ufrn.imd.dao.UsuarioDAO;
-import br.ufrn.imd.model.Usuario;
+import br.ufrn.imd.dao.UserDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -13,7 +12,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/br/ufrn/imd/view/TelaLogin.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/br/ufrn/imd/view/LoginScreen.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -24,11 +23,8 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
-		UsuarioDAO uDao = UsuarioDAO.getInstance();
-		uDao.loadUsuarios();
-		for(Usuario u : uDao.getUsuarios()) {
-			System.out.println(u.getNome());
-		}
+		UserDAO uDao = UserDAO.getInstance();
+		uDao.loadUsers();
 		launch(args);
 	}
 }

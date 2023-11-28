@@ -2,8 +2,8 @@ package br.ufrn.imd.control;
 
 import java.io.IOException;
 
-import br.ufrn.imd.dao.UsuarioDAO;
-import br.ufrn.imd.model.Usuario;
+import br.ufrn.imd.dao.UserDAO;
+import br.ufrn.imd.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,19 +18,19 @@ import javafx.stage.Window;
 
 public class LoginController {
 	@FXML
-	private TextField nomeField;
+	private TextField nameField;
 	
 	@FXML
-	private TextField senhaField;
+	private TextField passwordField;
 	
-	private UsuarioDAO uDao = UsuarioDAO.getInstance();
+	private UserDAO userDao = UserDAO.getInstance();
 	
 	/**
 	 * Mostra a tela de cadastro de usuário.
 	 */
-	public void abrirTelaCadastro() {
+	public void openRegistrationScreen() {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/br/ufrn/imd/view/TelaCadastro.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/br/ufrn/imd/view/RegistrationScreen.fxml"));
 			Stage stage = new Stage();
 			stage.setTitle("Cadastro");
 			Scene scene = new Scene(root);
@@ -47,24 +47,24 @@ public class LoginController {
 	 * estão corretas
 	 * @param event evento que acionou o método
 	 */
-	public void fazerLogin(ActionEvent event) {
-		String nome = nomeField.getText();
-		String senha = senhaField.getText();
-		Usuario u = uDao.findByCredentials(nome, senha);
+	public void signIn(ActionEvent event) {
+		String name = nameField.getText();
+		String password = passwordField.getText();
+		User u = userDao.findByCredentials(name, password);
 		
 		if(u == null) {
-			mostrarAlertaErro();
+			showErrorAlert();
 		} else {
-			uDao.setUsuarioLogado(u);
-			Window telaLogin = ((Node) event.getSource()).getScene().getWindow();
-			abrirTelaPrincipal(telaLogin);
+			userDao.setLoggedUser(u);
+			Window loginScreen = ((Node) event.getSource()).getScene().getWindow();
+			openMainScreen(loginScreen);
 		}
 	}
 	
 	/**
 	 * Mostra um alerta de erro de credenciais incorretas
 	 */
-	private void mostrarAlertaErro() {
+	private void showErrorAlert() {
 		Alert a = new Alert(AlertType.ERROR);
 		a.setTitle("ERRO");
 		a.setHeaderText("Não autorizado");
@@ -76,17 +76,16 @@ public class LoginController {
 	 * Muda a janela da aplicação da tela de login para a tela principal
 	 * @param telaLogin Instância da janela de login
 	 */
-	private void abrirTelaPrincipal(Window telaLogin) {
+	private void openMainScreen(Window loginScreen) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/br/ufrn/imd/view/TelaPrincipal.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/br/ufrn/imd/view/MainScreen.fxml"));
 			Stage stage = new Stage();
 			stage.setTitle("FXMusicPlayer");
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
-			telaLogin.hide();
+			loginScreen.hide();
 			stage.show();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	};
