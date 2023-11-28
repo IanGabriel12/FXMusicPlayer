@@ -15,7 +15,6 @@ import br.ufrn.imd.model.Playlist;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +25,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -53,6 +53,8 @@ public class MainScreenController {
 	private ListView<Song> playlistSongList;
 	@FXML
 	private Label playlistTitleLabel;
+	@FXML
+	private Slider timeSlider;
 	
 	private UserDAO userDao = UserDAO.getInstance();
 	private SongDAO songDao = SongDAO.getInstance();
@@ -60,7 +62,8 @@ public class MainScreenController {
 	private PlaylistDAO playlistDao = PlaylistDAO.getInstance();
 	
 	private MediaPlayer currentMediaPlayer;
-	ObservableList<Song> musicList;
+	private Playlist selectedPlaylist;
+	private boolean playingDefault;
 	
 	
 	public void logout(ActionEvent event) {
@@ -133,21 +136,25 @@ public class MainScreenController {
 		nameLabel.setText(loggedUser.getName().getValue());
 		
 		songList.setCellFactory(listView -> new SongNameCell());
-		songList.setItems(loggedUser.getAllSongs());
-		songList.getSelectionModel().selectedItemProperty().addListener(selectedSongListener());
+		songList.setItems(loggedUser.getDefaultPlaylist().getSongs());
+		songList.getSelectionModel().selectedItemProperty().addListener(selectedDefaultSongListener());
 	
 		playlistSongList.setCellFactory(listView -> new SongNameCell());
 		playlistSongList.getSelectionModel().selectedItemProperty().addListener(selectedSongListener());
 		
 		musicTitle.setText("Nada tocando ainda.");
 		toggleButton.setText("Play");
+		selectedPlaylist = loggedUser.getDefaultPlaylist();
+		playingDefault = true;
 	}
 	
 	public void playMusic(Song newMusic) {
 		String filePath = newMusic.getAbsolutePath().getValue();
         Media media = new Media(new File(filePath).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
+        
         if(currentMediaPlayer != null) currentMediaPlayer.stop();
+        
         currentMediaPlayer = mediaPlayer;
         currentMediaPlayer.play();
         musicTitle.setText(newMusic.getName());
@@ -185,11 +192,48 @@ public class MainScreenController {
 		}
 	}
 	
+	public void playNextSong() {
+		
+		if(playingDefault) {
+			Playlist defaultPlaylist = userDao.getLoggedUser().getDefaultPlaylist();
+			playMusic(defaultPlaylist.next());
+		} else {
+			playMusic(selectedPlaylist.next());
+		}
+	}
+	
+	public void playPreviousSong() {
+		if(playingDefault) {
+			Playlist defaultPlaylist = userDao.getLoggedUser().getDefaultPlaylist();
+			playMusic(defaultPlaylist.previous());
+		} else {
+			playMusic(selectedPlaylist.previous());
+		}
+	}
+	
+	private ChangeListener<Song> selectedDefaultSongListener() {
+		return new ChangeListener<Song>() {
+		    @Override
+		    public void changed(ObservableValue<? extends Song> observable, Song oldValue, Song newValue) {
+		    	if(newValue == null) return;
+		    	playMusic(newValue);
+		    	Playlist defaultPlaylist = userDao.getLoggedUser().getDefaultPlaylist();
+		    	Integer selectedIndex = defaultPlaylist.getSongs().indexOf(newValue);
+		    	defaultPlaylist.setSong(selectedIndex);
+		    	playingDefault = true;
+		    }
+		};
+	}
+	
 	private ChangeListener<Song> selectedSongListener() {
 		return new ChangeListener<Song>() {
 		    @Override
 		    public void changed(ObservableValue<? extends Song> observable, Song oldValue, Song newValue) {
+		    	if(newValue == null) return;
 		    	playMusic(newValue);
+		    	Integer selectedIndex = selectedPlaylist.getSongs().indexOf(newValue);
+		    	selectedPlaylist.setSong(selectedIndex);
+		    	playingDefault = false;
 		    }
 		};
 	}
@@ -204,7 +248,9 @@ public class MainScreenController {
 		    ) {
 		    	playlistTitleLabel.setText(newValue.getName().getValue());
 		    	playlistSongList.setItems(newValue.getSongs());
+		    	selectedPlaylist = newValue;
 		    	playMusic(newValue.start());
+		    	playingDefault = false;
 		    }
 		};
 	}

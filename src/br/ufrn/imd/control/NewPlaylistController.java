@@ -34,7 +34,9 @@ public class NewPlaylistController {
 	
 	@FXML
 	public void initialize() {
-		availableItems = FXCollections.observableArrayList(userDao.getLoggedUser().getAllSongs());
+		availableItems = FXCollections.observableArrayList(
+				userDao.getLoggedUser().getDefaultPlaylist().getSongs()
+		);
 		selectedItems = FXCollections.observableArrayList();
 		
 		availableSongs.setItems(availableItems);

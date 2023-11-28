@@ -47,6 +47,9 @@ public class Playlist {
 		currentSongIndex.setValue(index);
 		return songs.get(currentSongIndex.getValue());
 	}
-	
+
+	public void addSong(Song s) {
+		songs.add(s);
+	}
 	
 }

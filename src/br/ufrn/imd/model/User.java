@@ -13,12 +13,12 @@ public class User {
 	protected SimpleStringProperty password;
 	protected ObservableList<Song> songs;
 	protected ObservableList<Folder> folders;
-	protected ObservableList<Song> allSongs;
+	protected Playlist defaultPlaylist;
 	
 	public User() {
 		songs = FXCollections.observableArrayList();
 		folders = FXCollections.observableArrayList();
-		allSongs = FXCollections.observableArrayList();
+		defaultPlaylist = new Playlist();
 	}
 
 	public SimpleStringProperty getName() {
@@ -63,7 +63,7 @@ public class User {
 	
 	public void addSong(Song s) {
 		songs.add(s);
-		allSongs.add(s);
+		defaultPlaylist.addSong(s);
 	}
 	
 	public void addFolder(Folder f) {
@@ -73,17 +73,17 @@ public class User {
 			if(isAudioFile(file)) {
 				Song s = new Song();
 				s.setAbsolutePath(new SimpleStringProperty(file.getAbsolutePath()));
-				allSongs.add(s);
+				defaultPlaylist.addSong(s);
 			}
 		}
 	}
 	
-	public ObservableList<Song> getAllSongs() {
-		return allSongs;
+	public Playlist getDefaultPlaylist() {
+		return defaultPlaylist;
 	}
 
-	public void setAllSongs(ObservableList<Song> allSongs) {
-		this.allSongs = allSongs;
+	public void setDefaultPlaylist(Playlist defaultPlaylist) {
+		this.defaultPlaylist = defaultPlaylist;
 	}
 
 	private boolean isAudioFile(File file) {
