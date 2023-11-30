@@ -101,6 +101,10 @@ public class UserDAO {
 		users = FXCollections.observableArrayList();
 		try {
 			File file = new File(path);
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			
 			FileReader fr = new FileReader(file);
 			try (BufferedReader br = new BufferedReader(fr)) {
 				String name;
@@ -137,6 +141,9 @@ public class UserDAO {
 	private void saveIntoFile() {
 		try {
 			File file = new File(path);
+			if(!file.exists()) {
+				file.createNewFile();
+			}
 			FileWriter fr = new FileWriter(file);
 			try (BufferedWriter br = new BufferedWriter(fr)) {
 				for(User u : users) {
