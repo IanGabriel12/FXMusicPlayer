@@ -117,6 +117,7 @@ public class MainScreenController {
 		User loggedUser = userDao.getLoggedUser();
 		Boolean isVip = loggedUser instanceof UserVIP;
 		
+		loggedUser.setDefaultPlaylist(new Playlist());
 		songDao.loadSongsFromUser(loggedUser);
 		folderDao.loadFoldersFromUser(loggedUser);
 		
