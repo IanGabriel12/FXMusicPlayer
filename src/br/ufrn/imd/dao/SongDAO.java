@@ -15,6 +15,10 @@ public class SongDAO {
 	private String songsFolder = "src/br/ufrn/imd/data/songs";
 	private static SongDAO instance;
 	
+	/**
+	 * 
+	 * @return Retorna a instância do SongDAO seguindo o padrão singleton
+	 */
 	public static SongDAO getInstance() {
 		if(instance == null) {
 			instance = new SongDAO();
@@ -23,6 +27,10 @@ public class SongDAO {
 		return instance;
 	}
 	
+	/**
+	 * Carrega as músicas do usuário para a memória
+	 * @param user Usuário que adicionou as músicas
+	 */
 	public void loadSongsFromUser(User user) {
 		String filePath = songsFolder + String.format("/%s_songs.txt", user.getName().getValue());
 		File file = new File(filePath);
@@ -49,6 +57,10 @@ public class SongDAO {
 		}
 	}
 	
+	/**
+	 * Salva as músicas adicionadas pelo usuário em um arquivo
+	 * @param user Usuário que adicionou as músicas
+	 */
 	public void saveSongsFromUser(User user) {
 		String filePath = songsFolder + String.format("/%s_songs.txt", user.getName().getValue());
 		System.out.println(filePath);

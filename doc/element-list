@@ -1,0 +1,6 @@
+module:FXMusicPlayer
+br.ufrn.imd.application
+br.ufrn.imd.control
+br.ufrn.imd.dao
+br.ufrn.imd.model
+br.ufrn.imd.util

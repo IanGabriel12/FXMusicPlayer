@@ -41,7 +41,7 @@ public class UserDAO {
 
 	/**
 	 * Salva o usuário logado no sistema
-	 * @param usuarioLogado Instancia do usuário logado
+	 * @param loggedUser Instancia do usuário logado
 	 */
 	public void setLoggedUser(User loggedUser) {
 		this.loggedUser = loggedUser;
@@ -66,7 +66,7 @@ public class UserDAO {
 	
 	/**
 	 * Encontra o usuário pelo username
-	 * @param nome Nome para ser pesquisado
+	 * @param name Nome para ser pesquisado
 	 * @return Instancia do usuário com o username correspondente
 	 */
 	public User findByUsername(String name) {
@@ -81,8 +81,8 @@ public class UserDAO {
 	
 	/**
 	 * Encontra o usuário pelas suas credenciais (nome e senha)
-	 * @param nome Nome para ser pesquisado
-	 * @param senha Senha para ser pesquisada
+	 * @param name Nome para ser pesquisado
+	 * @param password Senha para ser pesquisada
 	 * @return Instancia do usuário que possui estas credenciais
 	 */
 	public User findByCredentials(String name, String password) {
@@ -136,7 +136,7 @@ public class UserDAO {
 	}
 	
 	/**
-	 * Atualiza o arquivo de usuários
+	 * Salva a lista de usuários em um arquivo
 	 */
 	private void saveIntoFile() {
 		try {

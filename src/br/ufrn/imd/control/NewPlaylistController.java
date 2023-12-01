@@ -45,6 +45,9 @@ public class NewPlaylistController {
 		selectedSongs.setCellFactory(view -> new SongNameCell());
 	}
 	
+	/**
+	 * Adiciona a música na playlist
+	 */
 	public void selectMusic() {
 		Song selected = availableSongs.getSelectionModel().selectedItemProperty().getValue();
 		if(selected == null) return;
@@ -52,6 +55,9 @@ public class NewPlaylistController {
 		availableItems.remove(selected);
 	}
 	
+	/**
+	 * Remove a música na playlist
+	 */
 	public void removeMusic() {
 		Song selected = selectedSongs.getSelectionModel().selectedItemProperty().getValue();
 		if(selected == null) return;
@@ -59,11 +65,18 @@ public class NewPlaylistController {
 		selectedItems.remove(selected);
 	}
 
-	
+	/**
+	 * Fecha a janeja de criação de playlist
+	 * @param event
+	 */
 	public void closeWindow(ActionEvent event) {
 		((Node) event.getSource()).getScene().getWindow().hide();
 	}
 	
+	/**
+	 * Valida os dados e cria a instância da playlist
+	 * @param event
+	 */
 	public void createPlaylist(ActionEvent event) {
 		String name = nameField.getText();
 		if(name.isBlank()) {

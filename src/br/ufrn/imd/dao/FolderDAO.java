@@ -15,6 +15,10 @@ public class FolderDAO {
 	private String folderDirectory = "src/br/ufrn/imd/data/folders";
 	private static FolderDAO instance;
 	
+	/**
+	 * 
+	 * @return Retorna a instância do padrão singleton do FolderDAO
+	 */
 	public static FolderDAO getInstance() {
 		if(instance == null) {
 			instance = new FolderDAO();
@@ -23,6 +27,12 @@ public class FolderDAO {
 		return instance;
 	}
 	
+	
+	/**
+	 * Carrega os diretórios adicionados pelo usuário recebido para 
+	 * a memória
+	 * @param user Intância do usuário a ter as pastas carregadas
+	 */
 	public void loadFoldersFromUser(User user) {
 		String filePath = folderDirectory + String.format("/%s_folders.txt", user.getName().getValue());
 		File file = new File(filePath);
@@ -49,6 +59,10 @@ public class FolderDAO {
 		}
 	}
 	
+	/**
+	 * Salva os diretórios do usuário em um arquivo
+	 * @param user Instância do usuário contendo os diretórios
+	 */
 	public void saveFoldersFromUser(User user) {
 		String filePath = folderDirectory + String.format("/%s_folders.txt", user.getName().getValue());
 		System.out.println(filePath);

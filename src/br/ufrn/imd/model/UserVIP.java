@@ -18,6 +18,10 @@ public class UserVIP extends User {
 		this.playlists = playlists;
 	}
 
+	/**
+	 * Adiciona uma playlist à lista de playlists do usuário
+	 * @param p Playlist a ser adicionada
+	 */
 	public void addPlaylist(Playlist p) {
 		playlists.add(p);
 	}

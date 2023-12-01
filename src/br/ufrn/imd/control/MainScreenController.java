@@ -65,7 +65,9 @@ public class MainScreenController {
 	private Playlist selectedPlaylist;
 	private boolean playingDefault;
 	
-	
+	/**
+	 * Retorna o usuário para a tela de login
+	 */
 	public void logout(ActionEvent event) {
 		try {
 			userDao.setLoggedUser(null);
@@ -81,12 +83,17 @@ public class MainScreenController {
 		}
 	}
 	
+	/**
+	 * Faz o usuário escolher uma música para adicionar
+	 * utilizando o seletor de arquivos do sistema
+	 * @param event
+	 */
 	public void openFileChooser(ActionEvent event) {
 		Window ownerWindow = ((Node) event.getSource()).getScene().getWindow();
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Adicionar arquivo de áudio");
 		fileChooser.getExtensionFilters().add(
-				new ExtensionFilter("Arquivos de áudio", "*.wav", "*.mp3")
+				new ExtensionFilter("Arquivos de áudio", "*.mp3")
 		);
 		File selectedFile = fileChooser.showOpenDialog(ownerWindow);
 		if(selectedFile != null) {
@@ -99,6 +106,11 @@ public class MainScreenController {
 		}
 	}
 	
+	/**
+	 * Faz o usuário escolher um diretório para adicionar
+	 * utilizando o seletor de arquivos do sistema
+	 * @param event
+	 */
 	public void openFolderChooser(ActionEvent event) {
 		Window ownerWindow = ((Node) event.getSource()).getScene().getWindow();
 		DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -149,6 +161,10 @@ public class MainScreenController {
 		playingDefault = true;
 	}
 	
+	/**
+	 * Faz o programa tocar a música recebida
+	 * @param newMusic Musica a ser tocada
+	 */
 	public void playMusic(Song newMusic) {
 		String filePath = newMusic.getAbsolutePath().getValue();
         Media media = new Media(new File(filePath).toURI().toString());
@@ -162,6 +178,10 @@ public class MainScreenController {
         toggleButton.setText("Pause");
 	}
 	
+	/**
+	 * Pausa o player se houver música tocando.
+	 * Retoma o player caso contrário.
+	 */
 	public void toggleMusic() {
 		if(currentMediaPlayer == null) return;
 		
@@ -174,6 +194,9 @@ public class MainScreenController {
 		}
 	}
 	
+	/**
+	 * Abre a tela de criação de playlist
+	 */
 	public void openNewPlaylistDialog() {
 		try {
 			if(!(userDao.getLoggedUser() instanceof UserVIP)) {
@@ -193,6 +216,10 @@ public class MainScreenController {
 		}
 	}
 	
+	/**
+	 * Faz o player tocar a próxima música da playlist
+	 * que está tocando no momento
+	 */
 	public void playNextSong() {
 		
 		if(playingDefault) {
@@ -203,6 +230,10 @@ public class MainScreenController {
 		}
 	}
 	
+	/**
+	 * Faz o player tocar a música anterior da playlist que
+	 * está tocando no momento
+	 */
 	public void playPreviousSong() {
 		if(playingDefault) {
 			Playlist defaultPlaylist = userDao.getLoggedUser().getDefaultPlaylist();
@@ -212,6 +243,11 @@ public class MainScreenController {
 		}
 	}
 	
+	/**
+	 * Retorna um listener que faz o player tocar a música selecionada
+	 * pelo usuário, caso esta música não pertença à uma playlist customizada.
+	 * @return
+	 */
 	private ChangeListener<Song> selectedDefaultSongListener() {
 		return new ChangeListener<Song>() {
 		    @Override
@@ -226,6 +262,11 @@ public class MainScreenController {
 		};
 	}
 	
+	/**
+	 * Retorna um listener que faz o player tocar a música selecionada
+	 * pelo usuário, caso esta música pertença à uma playlist customizada.
+	 * @return
+	 */
 	private ChangeListener<Song> selectedSongListener() {
 		return new ChangeListener<Song>() {
 		    @Override
@@ -239,6 +280,11 @@ public class MainScreenController {
 		};
 	}
 	
+	/**
+	 * Retorna um listener que faz o player trocar a playlist
+	 * que está sendo tocada.
+	 * @return
+	 */
 	private ChangeListener<Playlist> selectedPlaylistListener() {
 		return new ChangeListener<Playlist>() {
 		    @Override

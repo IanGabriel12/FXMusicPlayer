@@ -17,6 +17,10 @@ public class PlaylistDAO {
 	private String playlistFolderPath = "src/br/ufrn/imd/data/playlists";
 	private static PlaylistDAO instance;
 	
+	/**
+	 * 
+	 * @return Retorna a instância do PlaylistDAO seguindo o padrão singleton
+	 */
 	public static PlaylistDAO getInstance() {
 		if(instance == null) {
 			instance = new PlaylistDAO();
@@ -25,6 +29,10 @@ public class PlaylistDAO {
 		return instance;
 	}
 	
+	/**
+	 * Carrega as playlists do usuário para a memória
+	 * @param user Usuário dono das playlists
+	 */
 	public void loadPlaylistsFromUser(UserVIP user) {
 		try {
 			String userName = user.getName().getValue();
@@ -64,6 +72,10 @@ public class PlaylistDAO {
 		}
 	}
 	
+	/**
+	 * Salva as playlists do usuário em um arquivo
+	 * @param user Usuário dono das playlists
+	 */
 	public void savePlaylistsFromUser(UserVIP user) {
 		try {
 			String userName = user.getName().getValue();

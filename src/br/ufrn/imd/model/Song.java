@@ -13,7 +13,7 @@ public class Song {
 	public void setAbsolutePath(SimpleStringProperty absolutePath) {
 		this.absolutePath = absolutePath;
 	}
-
+	
 	public String getName() {
 		String pathValue = absolutePath.getValue();
 		return new File(pathValue).getName();
