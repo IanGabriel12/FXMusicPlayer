@@ -10,9 +10,11 @@ import br.ufrn.imd.dao.UserDAO;
 import br.ufrn.imd.model.Song;
 import br.ufrn.imd.model.User;
 import br.ufrn.imd.model.UserVIP;
+import br.ufrn.imd.util.Utilities;
 import br.ufrn.imd.model.Folder;
 import br.ufrn.imd.model.Playlist;
 import javafx.beans.value.ObservableValue;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -35,6 +37,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 public class MainScreenController {
 	@FXML
@@ -55,6 +58,8 @@ public class MainScreenController {
 	private Label playlistTitleLabel;
 	@FXML
 	private Slider timeSlider;
+	@FXML
+	private Label timeLabel;
 	
 	private UserDAO userDao = UserDAO.getInstance();
 	private SongDAO songDao = SongDAO.getInstance();
@@ -64,6 +69,7 @@ public class MainScreenController {
 	private MediaPlayer currentMediaPlayer;
 	private Playlist selectedPlaylist;
 	private boolean playingDefault;
+	private boolean isSliderChanging;
 	
 	/**
 	 * Retorna o usuário para a tela de login
@@ -173,9 +179,39 @@ public class MainScreenController {
         if(currentMediaPlayer != null) currentMediaPlayer.stop();
         
         currentMediaPlayer = mediaPlayer;
+        bindPlayerToControls();
         currentMediaPlayer.play();
         musicTitle.setText(newMusic.getName());
         toggleButton.setText("Pause");
+	}
+	
+	/**
+	 * Adiciona os listeners que fazem a barra do tempo de música funcionar.
+	 * A barra é atualizada automaticamente conforme a música passa.
+	 * Se o usuário arrastar a barra e soltar o player de música retoma o som
+	 * a partir do tempo selecionado.
+	 */
+	private void bindPlayerToControls() {
+		currentMediaPlayer.currentTimeProperty().addListener(ov -> {
+			double total = currentMediaPlayer.getTotalDuration().toMillis();
+	        double current = currentMediaPlayer.getCurrentTime().toMillis();
+	        timeSlider.setMax(total);
+	        timeLabel.setText(Utilities.getTimeString(current) + "/" + Utilities.getTimeString(total));
+			if(!isSliderChanging) {
+		        timeSlider.setValue(current);
+			}
+	    });
+		
+		timeSlider.valueChangingProperty().addListener((ov, oldValue, newValue) -> {
+			isSliderChanging = newValue;
+			if(!isSliderChanging) {
+				currentMediaPlayer.seek(Duration.millis(timeSlider.getValue()));
+			}
+		});
+		
+		currentMediaPlayer.setOnEndOfMedia(() -> {
+			playNextSong();
+		});
 	}
 	
 	/**
@@ -221,12 +257,15 @@ public class MainScreenController {
 	 * que está tocando no momento
 	 */
 	public void playNextSong() {
-		
 		if(playingDefault) {
 			Playlist defaultPlaylist = userDao.getLoggedUser().getDefaultPlaylist();
-			playMusic(defaultPlaylist.next());
+			defaultPlaylist.next();
+			SimpleIntegerProperty index = defaultPlaylist.getCurrentSongIndex();
+			songList.getSelectionModel().select(index.getValue());
 		} else {
-			playMusic(selectedPlaylist.next());
+			selectedPlaylist.next();
+			SimpleIntegerProperty index = selectedPlaylist.getCurrentSongIndex();
+			playlistSongList.getSelectionModel().select(index.getValue());
 		}
 	}
 	
@@ -237,9 +276,13 @@ public class MainScreenController {
 	public void playPreviousSong() {
 		if(playingDefault) {
 			Playlist defaultPlaylist = userDao.getLoggedUser().getDefaultPlaylist();
-			playMusic(defaultPlaylist.previous());
+			defaultPlaylist.previous();
+			SimpleIntegerProperty index = defaultPlaylist.getCurrentSongIndex();
+			songList.getSelectionModel().select(index.getValue());
 		} else {
-			playMusic(selectedPlaylist.previous());
+			selectedPlaylist.previous();
+			SimpleIntegerProperty index = selectedPlaylist.getCurrentSongIndex();
+			playlistSongList.getSelectionModel().select(index.getValue());
 		}
 	}
 	

@@ -11,4 +11,11 @@ public class Utilities {
 	public static boolean isAudioFile(File file) {
 		return file.getName().endsWith(".mp3");
 	}
+	
+	public static String getTimeString(double millis) {
+		int seconds = (int) Math.floor(millis / 1000);
+		String sec  = String.format("%02d", seconds % 60);
+		String minutes = String.format("%02d", seconds / 60);
+		return minutes + ":" + sec;
+	}
 }

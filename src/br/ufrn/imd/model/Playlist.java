@@ -18,6 +18,10 @@ public class Playlist {
 		currentSongIndex = new SimpleIntegerProperty(0);
 	}
 	
+	public SimpleIntegerProperty getCurrentSongIndex() {
+		return currentSongIndex;
+	}
+
 	public SimpleStringProperty getName() {
 		return name;
 	}
