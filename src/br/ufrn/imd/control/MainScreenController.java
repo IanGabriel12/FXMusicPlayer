@@ -82,6 +82,7 @@ public class MainScreenController {
 			Stage stage = new Stage();
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
+			stage.setTitle("FXMusicPlayer - Login");
 			stage.show();
 			((Node) event.getSource()).getScene().getWindow().hide();
 		} catch (IOException e) {
@@ -246,6 +247,7 @@ public class MainScreenController {
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.show();
+			stage.setTitle("Nova Playlist");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

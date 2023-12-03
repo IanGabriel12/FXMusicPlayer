@@ -32,7 +32,7 @@ public class LoginController {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/br/ufrn/imd/view/RegistrationScreen.fxml"));
 			Stage stage = new Stage();
-			stage.setTitle("Cadastro");
+			stage.setTitle("FXMusicPlayer - Cadastro");
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			stage.show();
@@ -85,6 +85,7 @@ public class LoginController {
 			stage.setScene(scene);
 			loginScreen.hide();
 			stage.show();
+			stage.setTitle("FXMusicPlayer");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
