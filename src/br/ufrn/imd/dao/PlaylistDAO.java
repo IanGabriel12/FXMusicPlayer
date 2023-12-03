@@ -73,6 +73,22 @@ public class PlaylistDAO {
 	}
 	
 	/**
+	 * Encontra uma playlist de um usuário a partir do nome da playlist.
+	 * @param name Nome da playlist
+	 * @param user Usuário a ser procurado
+	 * @return Playlist com o nome especificado. Retorna null caso não exista
+	 */
+	public Playlist findPlaylistWithName(String name, UserVIP user) {
+		for(Playlist p : user.getPlaylists()) {
+			if(p.getName().getValue().equals(name)) {
+				return p;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Salva as playlists do usuário em um arquivo
 	 * @param user Usuário dono das playlists
 	 */

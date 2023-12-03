@@ -79,9 +79,14 @@ public class NewPlaylistController {
 	 */
 	public void createPlaylist(ActionEvent event) {
 		String name = nameField.getText();
+		UserVIP user = (UserVIP) userDao.getLoggedUser();
 		if(name.isBlank()) {
 			Alert a = new Alert(AlertType.ERROR);
 			a.setContentText("A playlist deve ter um nome");
+			a.show();
+		} else if(playlistDao.findPlaylistWithName(name, user) != null) {
+			Alert a = new Alert(AlertType.ERROR);
+			a.setContentText("Já existe uma playlist com este nome");
 			a.show();
 		} else if (selectedSongs.getItems().isEmpty()) {
 			Alert a = new Alert(AlertType.ERROR);
