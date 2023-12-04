@@ -100,7 +100,7 @@ public class MainScreenController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Adicionar arquivo de áudio");
 		fileChooser.getExtensionFilters().add(
-				new ExtensionFilter("Arquivos de áudio", "*.mp3")
+				new ExtensionFilter("Arquivos de áudio", "*.mp3", "*.wav")
 		);
 		File selectedFile = fileChooser.showOpenDialog(ownerWindow);
 		if(selectedFile != null) {

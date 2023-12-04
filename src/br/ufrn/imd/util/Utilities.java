@@ -9,7 +9,7 @@ public class Utilities {
 	 * @return True se é um arquivo de áudio válido. False c.c
 	 */
 	public static boolean isAudioFile(File file) {
-		return file.getName().endsWith(".mp3");
+		return file.getName().endsWith(".mp3") || file.getName().endsWith(".wav");
 	}
 	
 	public static String getTimeString(double millis) {
